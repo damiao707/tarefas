@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-$END$
+    <div class="container mt-5">
+        <h1>Gerenciador de Tarefas</h1>
+
+        <!-- Formulário para adicionar novas tarefas -->
+        <form action="/add" method="POST">
+            <div class="form-group">
+                <label for="nome_tarefa">Nome da Tarefa:</label>
+                <input type="text" class="form-control" id="nome_tarefa" name="nome_tarefa" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar Tarefa</button>
+        </form>
+
+        <!-- Links para exibir tarefas pendentes e concluídas -->
+        <div class="mt-4">
+            <a href="/pendentes" class="btn btn-warning">Ver Tarefas Pendentes</a>
+            <a href="/concluidas" class="btn btn-success">Ver Tarefas Concluídas</a>
+        </div>
+
+        <!-- Exibindo tarefas -->
+        <h3 class="mt-4">Lista de Tarefas</h3>
+        <ul class="list-group">
+            {% for tarefa in tarefas %}
+            <li class="list-group-item">
+                {% if tarefa['concluida'] %}
+                    <s>{{ tarefa['nome'] }}</s> <!-- Tarefa concluída -->
+                {% else %}
+                    {{ tarefa['nome'] }} <!-- Tarefa pendente -->
+                    <a href="/concluir/{{ loop.index0 }}" class="btn btn-success btn-sm ml-2">Concluir</a>
+                {% endif %}
+                <a href="/delete/{{ loop.index0 }}" class="btn btn-danger btn-sm ml-2">Remover</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
