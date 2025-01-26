@@ -1,6 +1,6 @@
 # Gerenciador de Lista de Tarefas
 def exibir_menu():
-    print("\nBem-vindo ao Gerenciador de Tarefas!")
+    print("\nBem-vindo ao Gerenciador de Tar!")
     print("Escolha uma opção:")
     print("1. Adicionar tarefa")
     print("2. Listar tarefas")
