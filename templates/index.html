@@ -1,45 +1,87 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Tarefas</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Gerenciador de Tarefas</h1>
+        <h1 class="text-center">Gerenciador de Tarefas</h1>
 
-        <!-- Formulário para adicionar novas tarefas -->
-        <form action="/add" method="POST">
-            <div class="form-group">
-                <label for="nome_tarefa">Nome da Tarefa:</label>
-                <input type="text" class="form-control" id="nome_tarefa" name="nome_tarefa" required>
+        <!-- Formulário para adicionar nova tarefa -->
+        <form action="/add" method="POST" class="mt-4">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" name="nome_tarefa" class="form-control" placeholder="Adicione uma nova tarefa" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success w-100">Adicionar</button>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Adicionar Tarefa</button>
         </form>
 
-        <!-- Links para exibir tarefas pendentes e concluídas -->
-        <div class="mt-4">
-            <a href="/pendentes" class="btn btn-warning">Ver Tarefas Pendentes</a>
-            <a href="/concluidas" class="btn btn-success">Ver Tarefas Concluídas</a>
+        <!-- Tabela de Tarefas -->
+        <div class="mt-5">
+            <h2 class="text-center">Tarefas Pendentes</h2>
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nome da Tarefa</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tarefa in tarefas %}
+                    {% if tarefa[2] == 0 %}
+                    <tr>
+                        <td>{{ tarefa[0] }}</td>
+                        <td>{{ tarefa[1] }}</td>
+                        <td>
+                            <a href="/concluir/{{ tarefa[0] }}" class="btn btn-primary btn-sm">Concluir</a>
+                            <a href="/delete/{{ tarefa[0] }}" class="btn btn-danger btn-sm">Remover</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
-        <!-- Exibindo tarefas -->
-        <h3 class="mt-4">Lista de Tarefas</h3>
-        <ul class="list-group">
-            {% for tarefa in tarefas %}
-            <li class="list-group-item">
-                {% if tarefa['concluida'] %}
-                    <s>{{ tarefa['nome'] }}</s> <!-- Tarefa concluída -->
-                {% else %}
-                    {{ tarefa['nome'] }} <!-- Tarefa pendente -->
-                    <a href="/concluir/{{ loop.index0 }}" class="btn btn-success btn-sm ml-2">Concluir</a>
-                {% endif %}
-                <a href="/delete/{{ loop.index0 }}" class="btn btn-danger btn-sm ml-2">Remover</a>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="d-flex justify-content-end mt-4">
+    <a href="/export" target="_blank" class="btn btn-success">
+        Exportar para CSV
+    </a>
+</div>
+
+
+        <div class="mt-5">
+            <h2 class="text-center">Tarefas Concluídas</h2>
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nome da Tarefa</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tarefa in tarefas %}
+                    {% if tarefa[2] == 1 %}
+                    <tr>
+                        <td>{{ tarefa[0] }}</td>
+                        <td><s>{{ tarefa[1] }}</s></td>
+                        <td>
+                            <a href="/delete/{{ tarefa[0] }}" class="btn btn-danger btn-sm">Remover</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
